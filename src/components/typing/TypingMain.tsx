@@ -8,6 +8,7 @@ import {
 } from '@material-ui/core'
 import React, { useRef, useState } from 'react'
 import clsx from 'clsx'
+import { TypingCurrentWordsDisplay } from './TypingCurrentWordsDisplay'
 
 const styles = makeStyles((theme) =>
     createStyles({
@@ -59,7 +60,9 @@ export const TypingMain: React.FC = () => {
     const textEndRef = useRef<HTMLDivElement>(null)
 
     const [textInput, setTextInput] = useState('')
-    const [targetLine, setTargetLine] = useState('through though thought through')
+    const [targetLine, setTargetLine] = useState(
+        'through though thought through'
+    )
     const [textDisplay, setTextDisplay] = useState<string[]>([])
 
     const [greenEnabled, setGreenEnabled] = useState(false)
@@ -95,7 +98,6 @@ export const TypingMain: React.FC = () => {
             }
 
             setTextInput('')
-
             scrollToBottom()
         }
     }
@@ -124,7 +126,83 @@ export const TypingMain: React.FC = () => {
             </Grid>
             <Grid item container justify="center" xs={12}>
                 <div className={classes.currentTargetTextDisplay}>
-                    <Typography variant='h5'>{targetLine}</Typography>
+                    <Typography variant="h5">{targetLine}</Typography>
+                </div>
+            </Grid>
+            <Grid item container justify="center" xs={12}>
+                <div className={classes.currentTargetTextDisplay}>
+                    <Typography variant="h5">
+                        <TypingCurrentWordsDisplay
+                            words={[
+                                {
+                                    letters: [
+                                        {
+                                            letter: 't',
+                                            status: 'correct',
+                                        },
+                                        {
+                                            letter: 'h',
+                                            status: 'correct',
+                                        },
+                                        {
+                                            letter: 'r',
+                                            status: 'correct',
+                                        },
+                                        {
+                                            letter: 'o',
+                                            status: 'correct',
+                                        },
+                                        {
+                                            letter: 'u',
+                                            status: 'correct',
+                                        },
+                                        {
+                                            letter: 'g',
+                                            status: 'incorrect',
+                                        },
+                                        {
+                                            letter: 'h',
+                                            status: 'pending',
+                                        },
+                                    ],
+                                    word: 'through',
+                                },
+                                {
+                                    letters: [
+                                        {
+                                            letter: 't',
+                                            status: 'correct',
+                                        },
+                                        {
+                                            letter: 'h',
+                                            status: 'correct',
+                                        },
+                                        {
+                                            letter: 'r',
+                                            status: 'correct',
+                                        },
+                                        {
+                                            letter: 'o',
+                                            status: 'correct',
+                                        },
+                                        {
+                                            letter: 'u',
+                                            status: 'correct',
+                                        },
+                                        {
+                                            letter: 'g',
+                                            status: 'incorrect',
+                                        },
+                                        {
+                                            letter: 'h',
+                                            status: 'pending',
+                                        },
+                                    ],
+                                    word: 'through',
+                                }
+                            ]}
+                        />
+                    </Typography>
                 </div>
             </Grid>
             <Grid item container justify="center" xs={12}>
@@ -135,7 +213,7 @@ export const TypingMain: React.FC = () => {
                     variant="outlined"
                     InputProps={{
                         classes: {
-                            input: classes.textInput
+                            input: classes.textInput,
                         },
                     }}
                     value={textInput}
