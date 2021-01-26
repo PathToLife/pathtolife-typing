@@ -2,7 +2,7 @@ import { createStyles, makeStyles } from '@material-ui/core'
 import React from 'react'
 import { red, green } from '@material-ui/core/colors'
 import clsx from 'clsx'
-import { IWordDisplay } from './TypingInterfaces'
+import { IWordState } from './TypingInterfaces'
 
 const styles = makeStyles((theme) =>
     createStyles({
@@ -16,7 +16,7 @@ const styles = makeStyles((theme) =>
 )
 
 interface TypingWordsDisplayProps {
-    word: IWordDisplay
+    word: IWordState
 }
 export const TypingWordDisplay: React.FC<TypingWordsDisplayProps> = (props) => {
     const { word } = props
@@ -45,7 +45,7 @@ export const TypingWordDisplay: React.FC<TypingWordsDisplayProps> = (props) => {
 }
 
 interface TypingCurrentDisplayProps {
-    words: IWordDisplay[]
+    words: IWordState[]
 }
 
 export const TypingCurrentWordsDisplay: React.FC<TypingCurrentDisplayProps> = (

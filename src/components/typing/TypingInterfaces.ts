@@ -2,12 +2,12 @@
 
 export type TLetterStatus = 'correct' | 'incorrect' | 'pending'
 
-export interface ILetterDisplay {
+export interface ILetterState {
     letter: string
     status: TLetterStatus
 }
 
-export interface IWordDisplay {
+export interface IWordState {
     word: string
-    letters: ILetterDisplay[]
+    letters: ILetterState[]
 }
