@@ -3,11 +3,13 @@ import {makeAction, RootThunkAction} from './actionFactory';
 export const SET_CURRENT_WORD_IDX = 'SET_CURRENT_WORD_IDX'
 export const setCurrentWordIdx = (idx: number) => makeAction(SET_CURRENT_WORD_IDX, idx)
 
-
-type TActions = typeof SET_CURRENT_WORD_IDX
-type ThunkTypingAction<TReturn = void> = RootThunkAction<TReturn, TActions>
-
 export const newCharacter = (): ThunkTypingAction => {
+    return () => {
+
+    }
+}
+
+export const onKeyDownTyping = (key: string): ThunkTypingAction => {
     return () => {
 
     }
@@ -30,9 +32,8 @@ const shuffleWords = (oldWords: string): string => {
 }
 
 const nextLine = (): ThunkTypingAction => {
-    return (dispatch) => {
-        dispatch(setCurrentWordIdx(0))
-        setTargetLine(shuffleWords(targetLine))
+    return () => {
+
     }
 
 }
@@ -44,32 +45,16 @@ export const previousWord = (): ThunkTypingAction => {
 }
 
 const nextWord = (): ThunkTypingAction => {
-    return (dispatch, state) => {
-        const newWordIdx = state().typing.currentWordIdx + 1
-        const currentWordsState = state().typing.currentWord
-        if (newWordIdx >= currentWordsState.length) {
-            dispatch(nextLine())
-        } else {
-            dispatch(setCurrentWordIdx(newWordIdx))
-        }
-    }
-}
-
-const submitText = () => {
-    if (textInput.length && currentWordIdx < currentWordsState.length) {
-        setTextDisplay([...textDisplay, textInput])
-
-        const currentWord = currentWordsState[currentWordIdx].word
-        const textCorrect = textInput.trim() === currentWord
-
-        if (textCorrect) {
-            flashGreen()
-        } else {
-            flashRed()
-        }
-
-        setTextInput('')
-        nextWord()
+    return () => {
 
     }
 }
+
+const submitText = (): ThunkTypingAction => {
+    return () => {
+
+    }
+}
+
+export type TypingActions = ReturnType<typeof setCurrentWordIdx>
+export type ThunkTypingAction<TReturn = void> = RootThunkAction<TReturn, TypingActions>

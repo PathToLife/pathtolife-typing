@@ -2,6 +2,7 @@ import React, {useState} from 'react'
 import clsx from 'clsx';
 import {createStyles, makeStyles, TextField} from '@material-ui/core'
 import {useSelectorAppState, useThunkDispatch} from '../../store/mainStore';
+import {onKeyDownTyping} from '../../store/actions/typingActions';
 
 const styles = makeStyles(theme => createStyles({
     textInput: {
@@ -25,13 +26,12 @@ const styles = makeStyles(theme => createStyles({
 export const TypingInput: React.FC = () => {
     const classes = styles()
 
-    const [textInput, setTextInput] = useState('')
-
     const [greenEnabled, setGreenEnabled] = useState(false)
     const [redEnabled, setRedEnabled] = useState(false)
 
     const dispatch = useThunkDispatch()
-    const text = useSelectorAppState(s => s.typing.currentWord)
+    const currentWordInput = useSelectorAppState(s => s.typing.currentWordIdx)
+    const currentWord = useSelectorAppState(s => s.typing.currentWord)
 
     const flashGreen = () => {
         setGreenEnabled(true)
@@ -47,32 +47,8 @@ export const TypingInput: React.FC = () => {
         }, 200)
     }
 
-
-
-    const handleTextChange = (text: string) => {
-        // const timeTyped = Date.now()
-
-        let word = text.trim()
-
-        dispatchWordChange({
-            wordChange: {
-                word,
-                wordIdx: currentWordIdx,
-            },
-        })
-        setTextInput(word)
-    }
-
-    const handleTextInputKeyPress = (pressedKey: string) => {
-        switch (pressedKey) {
-            case 'Enter':
-                submitText()
-                break
-            case ' ':
-                submitText()
-                break
-            default:
-        }
+    const handleTextInputKeyPress = (key: string) => {
+        dispatch(onKeyDownTyping(key))
     }
 
     return (
@@ -86,8 +62,7 @@ export const TypingInput: React.FC = () => {
                     input: classes.textInput,
                 },
             }}
-            value={textInput}
-            onChange={(e) => handleTextChange(e.target.value)}
+            value={currentWordInput}
             onKeyDown={(e) => handleTextInputKeyPress(e.key)}
             className={clsx(
                 classes.textInputContainer,
