@@ -1,10 +1,10 @@
-import {createStyles, Grid, makeStyles, Typography,} from '@material-ui/core'
-import React, {useEffect, useReducer, useRef, useState} from 'react'
+import { createStyles, Grid, makeStyles, Typography } from '@material-ui/core'
+import React, { useEffect, useReducer, useRef, useState } from 'react'
 
-import {TypingCurrentWordsDisplay} from './TypingCurrentWordsDisplay'
-import {ILetterState, IWordState} from './TypingInterfaces'
-import {TypingInput} from './TypingInput';
-import {useSelectorAppState} from '../../store/mainStore';
+import { TypingCurrentWordsDisplay } from './TypingCurrentWordsDisplay'
+import { ILetterState, IWordState } from './TypingInterfaces'
+import { TypingInput } from './TypingInput'
+import { useSelectorAppState } from '../../store/mainStore'
 
 const styles = makeStyles((theme) =>
     createStyles({
@@ -32,7 +32,6 @@ const styles = makeStyles((theme) =>
             borderRadius: theme.shape.borderRadius,
             borderStyle: 'solid',
         },
-
     })
 )
 
@@ -41,7 +40,7 @@ export const TypingMain: React.FC = () => {
 
     const textEndRef = useRef<HTMLDivElement>(null)
 
-    const textDisplay = useSelectorAppState(s => s.typing.typedLines)
+    const textDisplay = useSelectorAppState((s) => s.typing.typedLines)
 
     const [targetLine, setTargetLine] = useState(
         'through though thought through'
@@ -149,26 +148,26 @@ export const TypingMain: React.FC = () => {
         }
     }, [textDisplay])
 
-
     return (
         <Grid container className={classes.rootContainer} spacing={2}>
             <Grid item container justify="center" xs={12}>
                 <div className={classes.textDisplay}>
                     {textDisplay.map((text, index) => {
                         return <Typography key={index}>{text}</Typography>
-                    })}pre
-                    <div ref={textEndRef}/>
+                    })}
+                    pre
+                    <div ref={textEndRef} />
                 </div>
             </Grid>
             <Grid item container justify="center" xs={12}>
                 <div className={classes.currentTargetTextDisplay}>
                     <Typography variant="h5">
-                        <TypingCurrentWordsDisplay words={currentWordsState}/>
+                        <TypingCurrentWordsDisplay words={currentWordsState} />
                     </Typography>
                 </div>
             </Grid>
             <Grid item container justify="center" xs={12}>
-                <TypingInput/>
+                <TypingInput />
             </Grid>
         </Grid>
     )
