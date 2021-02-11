@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="500" height="500" viewBox="0 0 500 500">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #ed1c24;
+      }
+
+      .cls-1, .cls-2, .cls-3, .cls-4 {
+        fill-rule: evenodd;
+      }
+
+      .cls-2 {
+        fill: #88c33d;
+      }
+
+      .cls-3 {
+        fill: #43c3e7;
+      }
+
+      .cls-4 {
+        fill: #68c8b4;
+      }
+
+      .cls-5 {
+        font-size: 254px;
+        fill: #fab00d;
+        text-anchor: middle;
+        font-family: "Myriad Pro";
+      }
+    </style>
+  </defs>
+  <path class="cls-1" d="M61.807,64.213h161v24h-137v138h-24"/>
+  <path id="Shape_1_copy" class="cls-2" d="M438.807,64.213h-161v24h137v138h24"/>
+  <path id="Shape_1_copy_2" class="cls-3" d="M438.807,436.213h-161v-24h137v-138h24"/>
+  <path id="Shape_1_copy_3" class="cls-4" d="M61.807,436.213h161v-24h-137v-138h-24"/>
+  <text id="T" class="cls-5" transform="matrix(1.058, 0, 0, 1.058, 249.773, 340.971)"><tspan x="0">T</tspan></text>
+</svg>

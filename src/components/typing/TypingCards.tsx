@@ -1,0 +1,59 @@
+import React from 'react'
+import {
+    Box,
+    createStyles,
+    Grid,
+    makeStyles,
+    Paper,
+    Typography,
+} from '@material-ui/core'
+import { useSelectorAppState } from '../../store/mainStore'
+
+const styles = makeStyles(() =>
+    createStyles({
+        fullWidth: {
+            width: '100%',
+        },
+    })
+)
+
+interface TypingCardProps {
+    title: string
+    value: any
+}
+export const TypingCard = (props: TypingCardProps) => {
+    const classes = styles()
+
+    return (
+        <Paper>
+            <Box p={3} className={classes.fullWidth}>
+                <Grid
+                    container
+                    alignItems={'center'}
+                    direction={'column'}
+                    spacing={2}
+                >
+                    <Grid item xs={12}>
+                        <Typography variant={'h5'}>{props.title}</Typography>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Typography variant={'h4'}>{props.value}</Typography>
+                    </Grid>
+                </Grid>
+            </Box>
+        </Paper>
+    )
+}
+
+export const TypingWPMCard = () => {
+    const wpm = useSelectorAppState((s) => s.typing.wordsPerMinuteAvgAdjusted)
+
+    return <TypingCard title={'WPM Adjusted'} value={wpm} />
+}
+
+export const TypingTotalWordsCard = () => {
+    const totalWordsTyped = useSelectorAppState(
+        (s) => s.typing.wordsPerMsInterval
+    ).length
+    return <TypingCard title={'Total Words'} value={totalWordsTyped} />
+}
