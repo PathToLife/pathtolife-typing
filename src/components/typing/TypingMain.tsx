@@ -1,27 +1,19 @@
 import { createStyles, Grid, makeStyles, Typography } from '@material-ui/core'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect } from 'react'
 
 import { TypingCurrentWordsDisplay } from './TypingCurrentWordsDisplay'
 import { TypingInput } from './TypingInput'
-import { useSelectorAppState, useThunkDispatch } from '../../store/mainStore'
+import { useThunkDispatch } from '../../store/mainStore'
 import { TypingKpmDisplay } from './TypingKpmDisplay'
-import { setCurrentLine } from '../../store/actions/typingActions'
+import { generateNewLine } from '../../store/actions/typingActions'
+import { TypingTotalWordsCard, TypingWPMCard } from './TypingCards'
+import { TypingTypedLinesDisplay } from './TypingTypedLinesDisplay'
 
 const styles = makeStyles((theme) =>
     createStyles({
         rootContainer: {
             width: '100%',
         },
-        textDisplay: {
-            height: '30vh',
-            width: '100%',
-            borderColor: theme.palette.common.black,
-            borderRadius: theme.shape.borderRadius,
-            borderStyle: 'solid',
-            padding: theme.spacing(1),
-            overflowY: 'scroll',
-        },
-
         currentTargetTextDisplay: {
             display: 'flex',
             alignItems: 'center',
@@ -40,38 +32,15 @@ export const TypingMain: React.FC = () => {
     const classes = styles()
 
     const dispatch = useThunkDispatch()
-    const textEndRef = useRef<HTMLDivElement>(null)
-    const textDisplay = useSelectorAppState((s) => s.typing.typedLines)
 
     useEffect(() => {
-        const scrollToBottom = () => {
-            if (!textEndRef || !textEndRef.current) return
-            textEndRef.current.scrollIntoView(true)
-        }
-
-        const t = setTimeout(() => {
-            scrollToBottom()
-        }, 100) // needs delay before the new line is rendered
-
-        return () => {
-            clearTimeout(t)
-        }
-    }, [textDisplay])
-
-    useEffect(() => {
-        dispatch(setCurrentLine('through though thought through'))
-    }, [])
+        dispatch(generateNewLine())
+    }, [dispatch])
 
     return (
         <Grid container className={classes.rootContainer} spacing={2}>
             <Grid item container justify="center" xs={12}>
-                <div className={classes.textDisplay}>
-                    {textDisplay.map((text, index) => {
-                        return <Typography key={index}>{text}</Typography>
-                    })}
-                    pre
-                    <div ref={textEndRef} />
-                </div>
+                <TypingTypedLinesDisplay />
             </Grid>
             <Grid item container justify="center" xs={12}>
                 <div className={classes.currentTargetTextDisplay}>
@@ -85,6 +54,12 @@ export const TypingMain: React.FC = () => {
             </Grid>
             <Grid item container justify="center" xs={12}>
                 <TypingKpmDisplay />
+            </Grid>
+            <Grid item container xs={6}>
+                <TypingWPMCard />
+            </Grid>
+            <Grid item container xs={6}>
+                <TypingTotalWordsCard />
             </Grid>
         </Grid>
     )

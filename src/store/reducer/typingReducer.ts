@@ -1,10 +1,13 @@
 import {
     SET_CURRENT_LINE_STATE,
+    SET_CURRENT_LINE_WORDS_TYPED,
     SET_CURRENT_WORD_IDX,
     SET_INPUT_WORD,
     SET_KEY_INTERVAL,
     SET_KEY_LAST_SEEN,
-    SET_WORDS_TYPED,
+    SET_LINE_IDX,
+    SET_WORD_INTERVAL,
+    SET_WORD_LAST_SEEN,
     TYPING_STATE_RESET,
     TypingActions,
 } from '../actions/typingActions'
@@ -23,14 +26,21 @@ export interface IWordState {
     letters: ILetterState[]
 }
 
+export interface IWordInterval {
+    msSinceLast: number
+    isWordCorrect: boolean
+    wordIdx: number
+    word: string
+}
+
 export interface ITypingStats {
     timeRemainingMS: number
 
     correctWordsCount: number
     incorrectWordsCount: number
 
-    wordsPerMinuteAvg: number // wpm correct words
-    wordsPerMsInterval: number[] // wpm graph
+    wordsPerMinuteAvgAdjusted: number // wpm correct words
+    wordsPerMsInterval: IWordInterval[] // wpm graph
     wordLastSeen: number | null
 
     keyPerMsInterval: number[] // kpm graph
@@ -60,7 +70,7 @@ const initialState: ITypingState = {
     incorrectWordsCount: 0,
     timeRemainingMS: 0,
 
-    wordsPerMinuteAvg: 0,
+    wordsPerMinuteAvgAdjusted: 0,
     wordsPerMsInterval: [],
     wordLastSeen: null,
 
@@ -88,11 +98,36 @@ export const typingReducer = (
         case SET_CURRENT_LINE_STATE:
             state.currentLineState = action.payload
             break
-        case SET_WORDS_TYPED:
+        case SET_CURRENT_LINE_WORDS_TYPED:
             state.currentLineWordsTyped = action.payload
             break
         case TYPING_STATE_RESET:
             state = initialState
+            break
+        case SET_LINE_IDX:
+            state.currentLineIdx = action.payload
+            break
+        case SET_WORD_INTERVAL:
+            state.wordsPerMsInterval = action.payload
+
+            const [
+                totalCorrectWords,
+                totalTimeMs,
+            ] = state.wordsPerMsInterval.reduce<[number, number]>(
+                ([tCW, ttMs], val) => {
+                    if (val.isWordCorrect) {
+                        return [tCW + 1, ttMs + val.msSinceLast]
+                    }
+                    return [tCW, ttMs + val.msSinceLast]
+                },
+                [0, 0]
+            )
+            const wpm = (totalCorrectWords * 60) / (totalTimeMs / 1000)
+            state.wordsPerMinuteAvgAdjusted = Math.floor(wpm)
+
+            break
+        case SET_WORD_LAST_SEEN:
+            state.wordLastSeen = action.payload
             break
         default:
     }
