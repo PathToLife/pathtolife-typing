@@ -1,0 +1,12 @@
+
+# react folders
+node_modules/**/*
+build/**/*
+
+# other folders
+assets/**/*
+.eslintcache
+
+# docker-compose
+docker-compose.yml
+
