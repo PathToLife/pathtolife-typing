@@ -2,7 +2,8 @@ import { createStyles, makeStyles } from '@material-ui/core'
 import React from 'react'
 import { green, red } from '@material-ui/core/colors'
 import clsx from 'clsx'
-import { IWordState } from './TypingInterfaces'
+import { useSelectorAppState } from '../../store/mainStore'
+import { IWordState } from '../../store/reducer/typingReducer'
 
 const styles = makeStyles((theme) =>
     createStyles({
@@ -45,14 +46,8 @@ export const TypingWordDisplay: React.FC<TypingWordsDisplayProps> = (props) => {
     )
 }
 
-interface TypingCurrentDisplayProps {
-    words: IWordState[]
-}
-
-export const TypingCurrentWordsDisplay: React.FC<TypingCurrentDisplayProps> = (
-    props
-) => {
-    const { words } = props
+export const TypingCurrentWordsDisplay = () => {
+    const words = useSelectorAppState((s) => s.typing.currentLineState)
 
     const render = (): JSX.Element[] | null => {
         const wordsJSX = words.map((word, index) => {

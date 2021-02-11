@@ -1,10 +1,11 @@
 import { createStyles, Grid, makeStyles, Typography } from '@material-ui/core'
-import React, { useEffect, useReducer, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 import { TypingCurrentWordsDisplay } from './TypingCurrentWordsDisplay'
-import { ILetterState, IWordState } from './TypingInterfaces'
 import { TypingInput } from './TypingInput'
-import { useSelectorAppState } from '../../store/mainStore'
+import { useSelectorAppState, useThunkDispatch } from '../../store/mainStore'
+import { TypingKpmDisplay } from './TypingKpmDisplay'
+import { setCurrentLine } from '../../store/actions/typingActions'
 
 const styles = makeStyles((theme) =>
     createStyles({
@@ -38,100 +39,9 @@ const styles = makeStyles((theme) =>
 export const TypingMain: React.FC = () => {
     const classes = styles()
 
+    const dispatch = useThunkDispatch()
     const textEndRef = useRef<HTMLDivElement>(null)
-
     const textDisplay = useSelectorAppState((s) => s.typing.typedLines)
-
-    const [targetLine, setTargetLine] = useState(
-        'through though thought through'
-    )
-    const [currentWordIdx, setCurrentWordIdx] = useState(0)
-
-    interface IWordChange {
-        word: string
-        wordIdx: number
-    }
-
-    interface IWordChangeAction {
-        wordChange?: IWordChange
-        targetLineChange?: string
-    }
-
-    const [currentWordsState, dispatchWordChange] = useReducer(
-        (
-            previousState: IWordState[],
-            action: IWordChangeAction
-        ): IWordState[] => {
-            console.log(action)
-
-            if (action.wordChange) {
-                if (action.wordChange.wordIdx >= previousState.length)
-                    return previousState
-
-                const previousWordState =
-                    previousState[action.wordChange.wordIdx]
-                const typedLetters = [...action.wordChange.word]
-                const correctLetters = [...previousWordState.word]
-
-                const newLettersState: ILetterState[] = []
-                correctLetters.forEach((letter, index) => {
-                    if (index >= typedLetters.length) {
-                        newLettersState.push({
-                            letter,
-                            status: 'pending',
-                        })
-                        return
-                    }
-
-                    const typedLetter = typedLetters[index]
-                    const isTypedCorrect = typedLetter === letter
-                    newLettersState.push({
-                        letter,
-                        status: isTypedCorrect ? 'correct' : 'incorrect',
-                    })
-                })
-
-                previousState[action.wordChange.wordIdx] = {
-                    letters: newLettersState,
-                    word: previousWordState.word,
-                }
-                const newState = [...previousState]
-                return newState
-            } else if (action.targetLineChange) {
-                const newWordState: IWordState[] = []
-                const wordsList = action.targetLineChange.split(' ')
-
-                wordsList.forEach((word) => {
-                    const newLettersState: ILetterState[] = []
-
-                    const letters = [...word]
-                    letters.forEach((letter) => {
-                        newLettersState.push({
-                            letter,
-                            status: 'pending',
-                        })
-                    })
-
-                    newWordState.push({
-                        word,
-                        letters: newLettersState,
-                    })
-                })
-
-                return newWordState
-            }
-
-            return previousState
-        },
-        []
-    )
-
-    // set initial targetLine temp, will remove later?
-    useEffect(() => {
-        dispatchWordChange({
-            targetLineChange: targetLine,
-        })
-    }, [targetLine])
 
     useEffect(() => {
         const scrollToBottom = () => {
@@ -148,6 +58,10 @@ export const TypingMain: React.FC = () => {
         }
     }, [textDisplay])
 
+    useEffect(() => {
+        dispatch(setCurrentLine('through though thought through'))
+    }, [])
+
     return (
         <Grid container className={classes.rootContainer} spacing={2}>
             <Grid item container justify="center" xs={12}>
@@ -162,12 +76,15 @@ export const TypingMain: React.FC = () => {
             <Grid item container justify="center" xs={12}>
                 <div className={classes.currentTargetTextDisplay}>
                     <Typography variant="h5">
-                        <TypingCurrentWordsDisplay words={currentWordsState} />
+                        <TypingCurrentWordsDisplay />
                     </Typography>
                 </div>
             </Grid>
             <Grid item container justify="center" xs={12}>
                 <TypingInput />
+            </Grid>
+            <Grid item container justify="center" xs={12}>
+                <TypingKpmDisplay />
             </Grid>
         </Grid>
     )

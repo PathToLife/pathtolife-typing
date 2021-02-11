@@ -50,7 +50,9 @@ export const TypingInput: React.FC = () => {
         }, 200)
     }
 
-    const handleTextInputKeyPress = (key: string) => {
+    const handleTextInputKeyPress = (
+        key: React.KeyboardEvent<HTMLDivElement>
+    ) => {
         dispatch(onKeyDownTyping(key))
     }
 
@@ -66,7 +68,7 @@ export const TypingInput: React.FC = () => {
                 },
             }}
             value={currentWordInput}
-            onKeyDown={(e) => handleTextInputKeyPress(e.key)}
+            onKeyDown={(e) => handleTextInputKeyPress(e)}
             className={clsx(
                 classes.textInputContainer,
                 greenEnabled && classes.greenColor,
