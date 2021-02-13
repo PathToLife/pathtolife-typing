@@ -246,7 +246,7 @@ const generateRandomSentence = (
 //     return newWords
 // }
 
-export const generateNewLine = (numWords = 6): ThunkTypingAction => (
+export const generateNewLine = (numWords = 10): ThunkTypingAction => (
     dispatch
 ) => {
     dispatch(setCurrentWordIdx(0))
