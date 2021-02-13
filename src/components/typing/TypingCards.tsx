@@ -54,6 +54,6 @@ export const TypingWPMCard = () => {
 export const TypingTotalWordsCard = () => {
     const totalWordsTyped = useSelectorAppState(
         (s) => s.typing.wordsPerMsInterval
-    ).length
+    ).filter((word) => word.isWordCorrect).length
     return <TypingCard title={'Total Words'} value={totalWordsTyped} />
 }
