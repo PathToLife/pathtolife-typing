@@ -1,16 +1,16 @@
 import {
-    SET_CURRENT_LINE_STATE,
-    SET_CURRENT_LINE_WORDS_TYPED,
-    SET_CURRENT_WORD_IDX,
-    SET_INPUT_WORD,
-    SET_KEY_INTERVAL,
-    SET_KEY_LAST_SEEN,
-    SET_LINE_IDX,
-    SET_WORD_INTERVAL,
-    SET_WORD_LAST_SEEN,
-    TYPING_STATE_RESET,
-    TypingActions,
-} from '../actions/typingActions'
+    resetTyping,
+    setCurrentLineState,
+    setCurrentLineWordsTyped,
+    setCurrentWordIdx,
+    setInputWord,
+    setKeyInterval,
+    setKeyLastSeen,
+    setLineIdx,
+    setWordInterval,
+    setWordLastSeen,
+} from './typingActions'
+import { createReducer } from '@reduxjs/toolkit'
 
 // letter status
 export type TLetterStatus = 'correct' | 'incorrect' | 'pending'
@@ -78,36 +78,25 @@ const initialState: ITypingState = {
     keyLastSeen: null,
 }
 
-export const typingReducer = (
-    state: ITypingState = initialState,
-    action: TypingActions
-) => {
-    switch (action.type) {
-        case SET_CURRENT_WORD_IDX:
+export const typingReducer = createReducer(initialState, (builder) => {
+    builder
+        .addCase(resetTyping, () => initialState)
+        .addCase(setCurrentWordIdx, (state, action) => {
             state.currentWordIdx = action.payload
-            break
-        case SET_INPUT_WORD:
-            state.currentWordInput = action.payload
-            break
-        case SET_KEY_LAST_SEEN:
+        })
+        .addCase(setInputWord, (state, action) => {
+            state.currentWordInput = action.payload.trim()
+        })
+        .addCase(setKeyLastSeen, (state, action) => {
             state.keyLastSeen = action.payload
-            break
-        case SET_KEY_INTERVAL:
+        })
+        .addCase(setKeyInterval, (state, action) => {
             state.keyPerMsInterval = action.payload
-            break
-        case SET_CURRENT_LINE_STATE:
-            state.currentLineState = action.payload
-            break
-        case SET_CURRENT_LINE_WORDS_TYPED:
-            state.currentLineWordsTyped = action.payload
-            break
-        case TYPING_STATE_RESET:
-            state = initialState
-            break
-        case SET_LINE_IDX:
-            state.currentLineIdx = action.payload
-            break
-        case SET_WORD_INTERVAL:
+        })
+        .addCase(setWordLastSeen, (state, action) => {
+            state.wordLastSeen = action.payload
+        })
+        .addCase(setWordInterval, (state, action) => {
             state.wordsPerMsInterval = action.payload
 
             const [
@@ -124,13 +113,14 @@ export const typingReducer = (
             )
             const wpm = (totalCorrectWords * 60) / (totalTimeMs / 1000)
             state.wordsPerMinuteAvgAdjusted = Math.floor(wpm)
-
-            break
-        case SET_WORD_LAST_SEEN:
-            state.wordLastSeen = action.payload
-            break
-        default:
-    }
-
-    return state
-}
+        })
+        .addCase(setLineIdx, (state, action) => {
+            state.currentLineIdx = action.payload
+        })
+        .addCase(setCurrentLineWordsTyped, (state, action) => {
+            state.currentLineWordsTyped = action.payload
+        })
+        .addCase(setCurrentLineState, (state, action) => {
+            state.currentLineState = action.payload
+        })
+})

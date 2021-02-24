@@ -3,7 +3,7 @@ import React from 'react'
 import { green, red } from '@material-ui/core/colors'
 import clsx from 'clsx'
 import { useSelectorAppState } from '../../store/mainStore'
-import { IWordState } from '../../store/reducer/typingReducer'
+import { IWordState } from '../../store/typing/typingReducer'
 
 const styles = makeStyles((theme) =>
     createStyles({

@@ -5,7 +5,7 @@ import { TypingCurrentWordsDisplay } from './TypingCurrentWordsDisplay'
 import { TypingInput } from './TypingInput'
 import { useThunkDispatch } from '../../store/mainStore'
 import { TypingKpmDisplay } from './TypingKpmDisplay'
-import { generateNewLine } from '../../store/actions/typingActions'
+import { generateNewLine } from '../../store/typing/typingActions'
 import { TypingTotalWordsCard, TypingWPMCard } from './TypingCards'
 import { TypingTypedLinesDisplay } from './TypingTypedLinesDisplay'
 

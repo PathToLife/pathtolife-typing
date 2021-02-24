@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import clsx from 'clsx'
 import { createStyles, makeStyles, TextField } from '@material-ui/core'
 import { useSelectorAppState, useThunkDispatch } from '../../store/mainStore'
-import { onKeyDownTyping } from '../../store/actions/typingActions'
+import { onKeyDownTyping } from '../../store/typing/typingActions'
 
 const styles = makeStyles((theme) =>
     createStyles({

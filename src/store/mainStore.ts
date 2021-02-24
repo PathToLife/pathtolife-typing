@@ -1,5 +1,5 @@
 import { Action, applyMiddleware, combineReducers, createStore } from 'redux'
-import { ITypingState, typingReducer } from './reducer/typingReducer'
+import { ITypingState, typingReducer } from './typing/typingReducer'
 import { createSelectorHook, useDispatch } from 'react-redux'
 import thunk, { ThunkDispatch } from 'redux-thunk'
 
