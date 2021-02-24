@@ -53,7 +53,7 @@ export const TypingInput: React.FC = () => {
         } else {
             flashRed()
         }
-    }, [currentLineState, currentWordIdx, wordHistory])
+    }, [currentWordIdx, wordHistory])
 
     const flashGreen = () => {
         setGreenEnabled(true)
