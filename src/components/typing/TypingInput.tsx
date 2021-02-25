@@ -30,12 +30,11 @@ export const TypingInput: React.FC = () => {
 
     const currentWordIdx = useSelectorAppState((s) => s.typing.currentWordIdx)
 
-    const wordStates = useSelectorAppState(
-        (s) => s.typing.currentLineState
-    )
+    const wordStates = useSelectorAppState((s) => s.typing.currentLineState)
 
     const [greenEnabled, setGreenEnabled] = useState(false)
     const [redEnabled, setRedEnabled] = useState(false)
+    const [flashWordIdx, setFlashWordIdx] = useState<number>(-1)
 
     const dispatch = useThunkDispatch()
     const currentWordInput = useSelectorAppState(
@@ -43,7 +42,19 @@ export const TypingInput: React.FC = () => {
     )
 
     useEffect(() => {
-        if (currentWordIdx <= 0 || wordStates.length < currentWordIdx) return
+        if (flashWordIdx && flashWordIdx > currentWordIdx) {
+            // we moved back a word
+            setFlashWordIdx(currentWordIdx)
+            return
+        }
+
+        if (
+            currentWordIdx <= 0 ||
+            flashWordIdx === currentWordIdx ||
+            wordStates.length < currentWordIdx
+        ) {
+            return
+        }
 
         const lastTyped = wordStates[currentWordIdx - 1]
         if (lastTyped.isCorrect()) {
@@ -51,7 +62,8 @@ export const TypingInput: React.FC = () => {
         } else {
             flashRed()
         }
-    }, [currentWordIdx, wordStates])
+        setFlashWordIdx(currentWordIdx)
+    }, [currentWordIdx, wordStates, flashWordIdx])
 
     const flashGreen = () => {
         setGreenEnabled(true)
