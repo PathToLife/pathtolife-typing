@@ -42,7 +42,7 @@ export const setCurrentLine = (line: string | string[]): RootThunkAction => (
             }
         })
         return new WordState({
-            word,
+            correctWord: word,
             letterStates,
         })
     })
@@ -187,7 +187,8 @@ const previousWord = (): RootThunkAction => (dispatch, store) => {
 
 const updateWordStats = (): RootThunkAction => (dispatch, store) => {
     const currentWordIdx = store().typing.currentWordIdx
-    const currentWord = store().typing.currentLineState[currentWordIdx].word
+    const currentWord = store().typing.currentLineState[currentWordIdx]
+        .correctWord
     const currentWordInput = store().typing.currentWordInput
     const wordInterval = store().typing.wordsPerMsInterval
     const wordLastSeen = store().typing.wordLastSeen

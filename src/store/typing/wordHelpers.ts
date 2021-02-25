@@ -13,35 +13,39 @@ export interface ILetterState {
 }
 
 export interface IWordState {
-    word: string
+    correctWord: string
     letterStates: ILetterState[]
 }
 
 export class WordState implements IWordState {
-    public word
+    public correctWord
     public letterStates
 
     constructor(wordState: Partial<IWordState>) {
-        this.word = wordState.word || ''
+        this.correctWord = wordState.correctWord || ''
         this.letterStates = wordState.letterStates || ([] as ILetterState[])
+
+        if (this.letterStates.length === 0) {
+            this.setAllPending()
+        }
     }
 
     public setAllPending() {
-        this.letterStates = [...this.word].map((l) => ({
+        this.letterStates = [...this.correctWord].map((l) => ({
             letter: l,
             status: 'pending',
         }))
     }
 
     public setAllIncorrect() {
-        this.letterStates = [...this.word].map((l) => ({
+        this.letterStates = [...this.correctWord].map((l) => ({
             letter: l,
             status: 'incorrect-wrong-letter',
         }))
     }
 
     public setAllCorrect() {
-        this.letterStates = [...this.word].map((l) => ({
+        this.letterStates = [...this.correctWord].map((l) => ({
             letter: l,
             status: 'correct',
         }))
@@ -57,33 +61,36 @@ export class WordState implements IWordState {
         }
 
         const testWordArray = [...typedWord]
-        let newLetterState: ILetterState[] = [...this.word].map((l, i) => {
-            if (i >= testWordArray.length)
+
+        let newLetterState: ILetterState[] = [...this.correctWord].map(
+            (l, i) => {
+                if (i >= testWordArray.length)
+                    return {
+                        status: 'pending',
+                        letter: l,
+                    }
                 return {
-                    status: 'pending',
+                    status:
+                        l === testWordArray[i]
+                            ? 'correct'
+                            : 'incorrect-wrong-letter',
                     letter: l,
                 }
-            return {
-                status:
-                    l === testWordArray[i]
-                        ? 'correct'
-                        : 'incorrect-wrong-letter',
-                letter: l,
             }
-        })
+        )
 
-        const hasMissingLetters = typedWord.length < this.word.length
-        const hasExtraLetters = typedWord.length > this.word.length
+        const hasMissingLetters = typedWord.length < this.correctWord.length
+        const hasExtraLetters = typedWord.length > this.correctWord.length
         if (hasMissingLetters) {
             // not enough words
-            const offset = this.word.length - typedWord.length
+            const offset = typedWord.length
 
-            for (let i = offset; i < this.word.length; i++) {
+            for (let i = offset; i < this.correctWord.length; i++) {
                 newLetterState[i].status = missingLetterStatus
             }
         } else if (hasExtraLetters) {
             // extra words
-            const extraLetters = [...typedWord.slice(this.word.length + 1)]
+            const extraLetters = [...typedWord.slice(this.correctWord.length)]
             extraLetters.forEach((letter) => {
                 newLetterState.push({
                     status: 'incorrect-extra-letter',
@@ -95,14 +102,31 @@ export class WordState implements IWordState {
         this.letterStates = newLetterState
     }
 
+    public setTypedWord(word: string, isSubmit = false) {
+        if (isSubmit) {
+            this.generateLetterState(word, 'incorrect-missing-letter')
+        } else {
+            this.generateLetterState(word)
+        }
+    }
+
     public getTypedWord(): string {
+        const typedStates: TLetterStatus[] = [
+            'correct',
+            'incorrect-extra-letter',
+            'incorrect-wrong-letter',
+        ]
         return this.letterStates
-            .map((letterState) => letterState.letter)
+            .filter((letter) => typedStates.includes(letter.status))
+            .map((letter) => letter.letter)
             .join('')
     }
 
     public isCorrect(): boolean {
-        return this.getTypedWord() === this.word
+        return (
+            this.letterStates.every((letter) => letter.status === 'correct') &&
+            this.getTypedWord() === this.correctWord
+        )
     }
 
     public clone(): WordState {
