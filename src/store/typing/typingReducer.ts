@@ -1,4 +1,5 @@
 import {
+    loadNextLine,
     resetTyping,
     setCurrentLineState,
     setCurrentWordIdx,
@@ -30,7 +31,10 @@ export interface ITypingState extends ITypingStats {
     typedLines: string[]
 
     currentLineIdx: number
-    currentLineState: WordState[] // the correctness of current line
+
+    lineStatePrevious: WordState[]
+    lineStateCurrent: WordState[] // the correctness of current line
+    lineStateNext: WordState[]
 
     currentWordIdx: number // the word idx being typed on the current line
     currentWordInput: string // the word currently being typed
@@ -40,7 +44,9 @@ const initialState: ITypingState = {
     typedLines: [],
 
     currentLineIdx: 0,
-    currentLineState: [],
+    lineStateCurrent: [],
+    lineStatePrevious: [],
+    lineStateNext: [],
 
     currentWordIdx: 0,
     currentWordInput: '',
@@ -78,6 +84,7 @@ export const typingReducer = createReducer(initialState, (builder) => {
         .addCase(setWordInterval, (state, action) => {
             state.wordsPerMsInterval = action.payload
 
+            // @todo standardise wpm calculation to be keys-per-min / 5
             const [
                 totalCorrectWords,
                 totalTimeMs,
@@ -97,6 +104,13 @@ export const typingReducer = createReducer(initialState, (builder) => {
             state.currentLineIdx = action.payload
         })
         .addCase(setCurrentLineState, (state, action) => {
-            state.currentLineState = action.payload
+            state.lineStateCurrent = action.payload
+        })
+        .addCase(loadNextLine, (state, action) => {
+            state.lineStatePrevious = state.lineStateCurrent
+            state.lineStateCurrent = state.lineStateNext
+            state.lineStateNext = action.payload
+            state.currentWordIdx = 0
+            state.currentWordInput = ''
         })
 })

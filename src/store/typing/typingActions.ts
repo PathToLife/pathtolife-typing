@@ -1,7 +1,10 @@
 import React from 'react'
 import { RootThunkAction } from '../actionFactory'
-import { ILetterState, IWordInterval } from './wordHelpers'
-import { top200Words } from '../store/wordList'
+import {
+    generateRandomLineState,
+    IWordInterval,
+    TLineState,
+} from './wordHelpers'
 import { createAction } from '@reduxjs/toolkit'
 import { WordState } from './wordHelpers'
 
@@ -25,29 +28,7 @@ export const setWordInterval = createAction<IWordInterval[]>('wordInterval/set')
 
 export const setCurrentLineState = createAction<WordState[]>('currentLine/set')
 
-export const setCurrentLine = (line: string | string[]): RootThunkAction => (
-    dispatch
-) => {
-    let words: string[]
-    if (Array.isArray(line)) {
-        words = line
-    } else {
-        words = line.split(' ')
-    }
-    const wordState: WordState[] = words.map((word) => {
-        const letterStates: ILetterState[] = [...word].map((letter) => {
-            return {
-                letter,
-                status: 'pending',
-            }
-        })
-        return new WordState({
-            correctWord: word,
-            letterStates,
-        })
-    })
-    dispatch(setCurrentLineState(wordState))
-}
+export const loadNextLine = createAction<TLineState>('nextLine/load')
 
 export const onKeyDownTyping = (
     e: React.KeyboardEvent<HTMLElement>
@@ -107,7 +88,7 @@ const updateWordState = (
     currentWordIdx: number,
     isSubmit: boolean = false
 ): RootThunkAction => (dispatch, store) => {
-    const newLineState = [...store().typing.currentLineState]
+    const newLineState = [...store().typing.lineStateCurrent]
     const currentWordState = newLineState[currentWordIdx]
     const typedWordClean = typedWord.trim()
 
@@ -140,32 +121,19 @@ const storeKeydownRate = (): RootThunkAction => (dispatch, store) => {
     }
 }
 
-const generateRandomSentence = (
-    numWords: number,
-    wordList: string[] = top200Words
-): string[] => {
-    const outList = [] as string[]
-
-    for (let i = 0; i < numWords; i++) {
-        const idx = Math.floor(Math.random() * wordList.length)
-        outList.push(wordList[idx])
+export const initLine = (): RootThunkAction => {
+    return (dispatch) => {
+        dispatch(setLineIdx(0))
+        dispatch(loadNextLine(generateRandomLineState(10)))
+        dispatch(loadNextLine(generateRandomLineState(10)))
     }
-
-    return outList
-}
-
-export const generateNewLine = (numWords = 10): RootThunkAction => (
-    dispatch
-) => {
-    dispatch(setCurrentWordIdx(0))
-    dispatch(setInputWord(''))
-    dispatch(setCurrentLine(generateRandomSentence(numWords)))
 }
 
 export const nextLine = (): RootThunkAction => (dispatch, store) => {
     const lineIdx = store().typing.currentLineIdx
     dispatch(setLineIdx(lineIdx + 1))
-    dispatch(generateNewLine())
+
+    dispatch(loadNextLine(generateRandomLineState(10)))
 }
 
 const previousWord = (): RootThunkAction => (dispatch, store) => {
@@ -174,7 +142,7 @@ const previousWord = (): RootThunkAction => (dispatch, store) => {
     if (currentWordIdx === 0) return
 
     const previousWordState = new WordState(
-        store().typing.currentLineState[currentWordIdx - 1]
+        store().typing.lineStateCurrent[currentWordIdx - 1]
     )
     const previousWord = previousWordState.getTypedWord()
 
@@ -187,7 +155,7 @@ const previousWord = (): RootThunkAction => (dispatch, store) => {
 
 const updateWordStats = (): RootThunkAction => (dispatch, store) => {
     const currentWordIdx = store().typing.currentWordIdx
-    const currentWord = store().typing.currentLineState[currentWordIdx]
+    const currentWord = store().typing.lineStateCurrent[currentWordIdx]
         .correctWord
     const currentWordInput = store().typing.currentWordInput
     const wordInterval = store().typing.wordsPerMsInterval
@@ -213,7 +181,7 @@ const updateWordStats = (): RootThunkAction => (dispatch, store) => {
 
 const nextWord = (): RootThunkAction => (dispatch, store) => {
     const currentWordIdx = store().typing.currentWordIdx
-    const currentLineLength = store().typing.currentLineState.length
+    const currentLineLength = store().typing.lineStateCurrent.length
     const currentWordInput = store().typing.currentWordInput
 
     dispatch(updateWordStats())
