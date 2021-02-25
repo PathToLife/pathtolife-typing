@@ -13,6 +13,14 @@ const styles = makeStyles((theme) =>
         incorrectLetter: {
             color: red[500],
         },
+        incorrectExtraLetter: {
+            color: red[500],
+            textDecoration: 'line-through',
+        },
+        incorrectMissingLetter: {
+            color: red[500],
+            textDecoration: 'underline',
+        },
     })
 )
 
@@ -35,7 +43,11 @@ export const TypingWordDisplay: React.FC<TypingWordsDisplayProps> = (props) => {
                             letter.status === 'correct' &&
                                 classes.correctLetter,
                             letter.status === 'incorrect-wrong-letter' &&
-                                classes.incorrectLetter
+                                classes.incorrectLetter,
+                            letter.status === 'incorrect-missing-letter' &&
+                                classes.incorrectMissingLetter,
+                            letter.status === 'incorrect-extra-letter' &&
+                                classes.incorrectExtraLetter
                         )}
                     >
                         {letter.letter}
