@@ -1,4 +1,6 @@
 // letter status
+import { top200Words } from '../store/wordList'
+
 export type TLetterStatus =
     | 'correct'
     | 'pending'
@@ -16,6 +18,15 @@ export interface IWordState {
     correctWord: string
     letterStates: ILetterState[]
 }
+
+export interface IWordInterval {
+    msSinceLast: number
+    isWordCorrect: boolean
+    wordIdx: number
+    word: string
+}
+
+export type TLineState = WordState[]
 
 export class WordState implements IWordState {
     public correctWord
@@ -134,9 +145,29 @@ export class WordState implements IWordState {
     }
 }
 
-export interface IWordInterval {
-    msSinceLast: number
-    isWordCorrect: boolean
-    wordIdx: number
-    word: string
+export const generateRandomSentence = (
+    numWords: number,
+    wordList: string[] = top200Words
+): string[] => {
+    const outList = [] as string[]
+
+    for (let i = 0; i < numWords; i++) {
+        const idx = Math.floor(Math.random() * wordList.length)
+        outList.push(wordList[idx])
+    }
+
+    return outList
+}
+
+export const generateRandomLineState = (
+    numWords: number,
+    wordList: string[] = top200Words
+): TLineState => {
+    const words = generateRandomSentence(numWords, wordList)
+    return words.map(
+        (correctWord) =>
+            new WordState({
+                correctWord,
+            })
+    )
 }

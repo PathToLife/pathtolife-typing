@@ -30,7 +30,7 @@ export const TypingInput: React.FC = () => {
 
     const currentWordIdx = useSelectorAppState((s) => s.typing.currentWordIdx)
 
-    const wordStates = useSelectorAppState((s) => s.typing.currentLineState)
+    const wordStates = useSelectorAppState((s) => s.typing.lineStateCurrent)
 
     const [greenEnabled, setGreenEnabled] = useState(false)
     const [redEnabled, setRedEnabled] = useState(false)
