@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import clsx from 'clsx'
 import { createStyles, makeStyles, TextField } from '@material-ui/core'
 import { useSelectorAppState, useThunkDispatch } from '../../store/mainStore'
-import { onKeyDownTyping } from '../../store/actions/typingActions'
+import { onKeyDownTyping } from '../../store/typing/typingActions'
 
 const styles = makeStyles((theme) =>
     createStyles({
@@ -29,15 +29,12 @@ export const TypingInput: React.FC = () => {
     const classes = styles()
 
     const currentWordIdx = useSelectorAppState((s) => s.typing.currentWordIdx)
-    const currentLineState = useSelectorAppState(
-        (s) => s.typing.currentLineState
-    )
-    const wordHistory = useSelectorAppState(
-        (s) => s.typing.currentLineWordsTyped
-    )
+
+    const wordStates = useSelectorAppState((s) => s.typing.currentLineState)
 
     const [greenEnabled, setGreenEnabled] = useState(false)
     const [redEnabled, setRedEnabled] = useState(false)
+    const [flashWordIdx, setFlashWordIdx] = useState<number>(-1)
 
     const dispatch = useThunkDispatch()
     const currentWordInput = useSelectorAppState(
@@ -45,15 +42,28 @@ export const TypingInput: React.FC = () => {
     )
 
     useEffect(() => {
-        if (currentWordIdx <= 0 || wordHistory.length < currentWordIdx) return
+        if (flashWordIdx && flashWordIdx > currentWordIdx) {
+            // we moved back a word
+            setFlashWordIdx(currentWordIdx)
+            return
+        }
 
-        const lastTyped = wordHistory[currentWordIdx - 1]
-        if (lastTyped === currentLineState[currentWordIdx - 1].word) {
+        if (
+            currentWordIdx <= 0 ||
+            flashWordIdx === currentWordIdx ||
+            wordStates.length < currentWordIdx
+        ) {
+            return
+        }
+
+        const lastTyped = wordStates[currentWordIdx - 1]
+        if (lastTyped.isCorrect()) {
             flashGreen()
         } else {
             flashRed()
         }
-    }, [currentWordIdx, wordHistory])
+        setFlashWordIdx(currentWordIdx)
+    }, [currentWordIdx, wordStates, flashWordIdx])
 
     const flashGreen = () => {
         setGreenEnabled(true)
