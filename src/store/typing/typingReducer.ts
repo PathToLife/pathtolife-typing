@@ -1,7 +1,6 @@
 import {
     resetTyping,
     setCurrentLineState,
-    setCurrentLineWordsTyped,
     setCurrentWordIdx,
     setInputWord,
     setKeyInterval,
@@ -11,27 +10,7 @@ import {
     setWordLastSeen,
 } from './typingActions'
 import { createReducer } from '@reduxjs/toolkit'
-
-// letter status
-export type TLetterStatus = 'correct' | 'incorrect' | 'pending'
-
-// stores status of each letter
-export interface ILetterState {
-    letter: string
-    status: TLetterStatus
-}
-
-export interface IWordState {
-    word: string
-    letters: ILetterState[]
-}
-
-export interface IWordInterval {
-    msSinceLast: number
-    isWordCorrect: boolean
-    wordIdx: number
-    word: string
-}
+import { IWordInterval, WordState } from './wordHelpers'
 
 export interface ITypingStats {
     timeRemainingMS: number
@@ -51,8 +30,8 @@ export interface ITypingState extends ITypingStats {
     typedLines: string[]
 
     currentLineIdx: number
-    currentLineState: IWordState[] // the correctness of current line
-    currentLineWordsTyped: string[] // the words previously typed
+    currentLineState: WordState[] // the correctness of current line
+
     currentWordIdx: number // the word idx being typed on the current line
     currentWordInput: string // the word currently being typed
 }
@@ -62,7 +41,7 @@ const initialState: ITypingState = {
 
     currentLineIdx: 0,
     currentLineState: [],
-    currentLineWordsTyped: [],
+
     currentWordIdx: 0,
     currentWordInput: '',
 
@@ -116,9 +95,6 @@ export const typingReducer = createReducer(initialState, (builder) => {
         })
         .addCase(setLineIdx, (state, action) => {
             state.currentLineIdx = action.payload
-        })
-        .addCase(setCurrentLineWordsTyped, (state, action) => {
-            state.currentLineWordsTyped = action.payload
         })
         .addCase(setCurrentLineState, (state, action) => {
             state.currentLineState = action.payload

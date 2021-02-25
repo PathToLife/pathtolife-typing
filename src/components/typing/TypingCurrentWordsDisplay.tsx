@@ -3,7 +3,7 @@ import React from 'react'
 import { green, red } from '@material-ui/core/colors'
 import clsx from 'clsx'
 import { useSelectorAppState } from '../../store/mainStore'
-import { IWordState } from '../../store/typing/typingReducer'
+import { IWordState } from '../../store/typing/wordHelpers'
 
 const styles = makeStyles((theme) =>
     createStyles({
@@ -27,14 +27,14 @@ export const TypingWordDisplay: React.FC<TypingWordsDisplayProps> = (props) => {
 
     return (
         <>
-            {word.letters.map((letter, index) => {
+            {word.letterStates.map((letter, index) => {
                 return (
                     <span
                         key={index}
                         className={clsx(
                             letter.status === 'correct' &&
                                 classes.correctLetter,
-                            letter.status === 'incorrect' &&
+                            letter.status === 'incorrect-wrong-letter' &&
                                 classes.incorrectLetter
                         )}
                     >

@@ -29,11 +29,9 @@ export const TypingInput: React.FC = () => {
     const classes = styles()
 
     const currentWordIdx = useSelectorAppState((s) => s.typing.currentWordIdx)
-    const currentLineState = useSelectorAppState(
+
+    const wordStates = useSelectorAppState(
         (s) => s.typing.currentLineState
-    )
-    const wordHistory = useSelectorAppState(
-        (s) => s.typing.currentLineWordsTyped
     )
 
     const [greenEnabled, setGreenEnabled] = useState(false)
@@ -45,15 +43,15 @@ export const TypingInput: React.FC = () => {
     )
 
     useEffect(() => {
-        if (currentWordIdx <= 0 || wordHistory.length < currentWordIdx) return
+        if (currentWordIdx <= 0 || wordStates.length < currentWordIdx) return
 
-        const lastTyped = wordHistory[currentWordIdx - 1]
-        if (lastTyped === currentLineState[currentWordIdx - 1].word) {
+        const lastTyped = wordStates[currentWordIdx - 1]
+        if (lastTyped.isCorrect()) {
             flashGreen()
         } else {
             flashRed()
         }
-    }, [currentWordIdx, wordHistory])
+    }, [currentWordIdx, wordStates])
 
     const flashGreen = () => {
         setGreenEnabled(true)
