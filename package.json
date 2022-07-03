@@ -19,6 +19,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "build-docker": "docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7 -t pathtolife/pathtolife-typing --push .",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
