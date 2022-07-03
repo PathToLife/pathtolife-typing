@@ -16,6 +16,10 @@ const styles = makeStyles((theme) =>
     })
 )
 
+
+// This component is not complete
+// Purpose -  allow the user to see more of the text that has been typed
+
 export const TypingTypedLinesDisplay = () => {
     const classes = styles()
     const textEndRef = useRef<HTMLDivElement>(null)

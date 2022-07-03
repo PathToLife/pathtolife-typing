@@ -11,7 +11,7 @@ import {
     TypingTotalWordsCard,
     TypingWPMCard,
 } from './TypingCards'
-import { TypingTypedLinesDisplay } from './TypingTypedLinesDisplay'
+// import { TypingTypedLinesDisplay } from './TypingTypedLinesDisplay'
 
 const styles = makeStyles((theme) =>
     createStyles({
@@ -33,7 +33,7 @@ export const TypingMain: React.FC = () => {
     return (
         <Grid container className={classes.rootContainer} spacing={2}>
             <Grid item container justify="center" xs={12}>
-                <TypingTypedLinesDisplay />
+                {/* <TypingTypedLinesDisplay /> */}
             </Grid>
             <Grid item container justify="center" xs={12}>
                 <TypingLineStatusDisplay />
