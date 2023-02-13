@@ -1,4 +1,4 @@
-# PathToLife Typing ![docker-publish](https://github.com/PathToLife/pathtolife-typing/workflows/docker-publish/badge.svg)
+# PathToLife Typing
 
 A typing application built in React, Material-UI, and ReCharts
 
