@@ -1,5 +1,5 @@
-import React, { useEffect, useRef } from 'react'
-import { createStyles, makeStyles, Typography } from '@material-ui/core'
+import { useEffect, useRef } from 'react'
+import { createStyles, makeStyles, Typography } from '@mui/material'
 import { useSelectorAppState } from '../../store/mainStore'
 
 const styles = makeStyles((theme) =>
@@ -13,9 +13,8 @@ const styles = makeStyles((theme) =>
             padding: theme.spacing(1),
             overflowY: 'scroll',
         },
-    })
+    }),
 )
-
 
 // This component is not complete
 // Purpose -  allow the user to see more of the text that has been typed

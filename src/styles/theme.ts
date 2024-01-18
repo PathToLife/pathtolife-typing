@@ -1,20 +1,27 @@
-import { createMuiTheme } from '@material-ui/core'
+import { ThemeOptions, createTheme } from '@mui/material/styles'
 
-export const darkTheme = createMuiTheme({
-    palette: {
-        type: 'dark',
-    },
-    overrides: {
+const otherOverrides: ThemeOptions = {
+    components: {
         MuiPaper: {
-            root: {
-                width: '100%',
+            styleOverrides: {
+                root: {
+                    width: '100%',
+                },
             },
         },
     },
+}
+
+export const darkTheme = createTheme({
+    palette: {
+        mode: 'dark',
+    },
+    ...otherOverrides,
 })
 
-export const lightTheme = createMuiTheme({
+export const lightTheme = createTheme({
     palette: {
-        type: 'light',
+        mode: 'light',
     },
+    ...otherOverrides,
 })

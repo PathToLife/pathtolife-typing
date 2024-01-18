@@ -1,4 +1,4 @@
-import { createStyles, Grid, makeStyles } from '@material-ui/core'
+import { createStyles, Grid, makeStyles } from '@mui/material'
 import React, { useEffect } from 'react'
 
 import { TypingLineStatusDisplay } from './TypingLineStatusDisplay'
@@ -18,7 +18,7 @@ const styles = makeStyles((theme) =>
         rootContainer: {
             width: '100%',
         },
-    })
+    }),
 )
 
 export const TypingMain: React.FC = () => {

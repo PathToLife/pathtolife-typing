@@ -5,7 +5,7 @@ import {
     Grid,
     makeStyles,
     Typography,
-} from '@material-ui/core'
+} from '@mui/material'
 import React from 'react'
 
 import { TypingMain } from '../components/typing/TypingMain'
@@ -25,7 +25,7 @@ const styles = makeStyles((theme) =>
         subtitle: {
             paddingLeft: theme.spacing(1),
         },
-    })
+    }),
 )
 
 export const MainPage: React.FC = () => {

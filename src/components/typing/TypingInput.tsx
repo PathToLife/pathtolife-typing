@@ -1,16 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import clsx from 'clsx'
-import { createStyles, makeStyles, TextField } from '@material-ui/core'
+import { createStyles, makeStyles, TextField } from '@mui/material'
 import { useSelectorAppState, useThunkDispatch } from '../../store/mainStore'
 import { onKeyDownTyping } from '../../store/typing/typingActions'
 
 const styles = makeStyles((theme) =>
     createStyles({
-        textInput: {
-            textAlign: 'center',
-            fontWeight: 'bold',
-            fontSize: 20,
-        },
+        textInput: ,
         textInputContainer: {
             transition: 'background-color 0.2s linear',
         },
@@ -22,7 +18,7 @@ const styles = makeStyles((theme) =>
             backgroundColor: theme.palette.error.light,
             color: theme.palette.error.dark,
         },
-    })
+    }),
 )
 
 export const TypingInput: React.FC = () => {
@@ -38,7 +34,7 @@ export const TypingInput: React.FC = () => {
 
     const dispatch = useThunkDispatch()
     const currentWordInput = useSelectorAppState(
-        (s) => s.typing.currentWordInput
+        (s) => s.typing.currentWordInput,
     )
 
     useEffect(() => {
@@ -80,7 +76,7 @@ export const TypingInput: React.FC = () => {
     }
 
     const handleTextInputKeyPress = (
-        key: React.KeyboardEvent<HTMLDivElement>
+        key: React.KeyboardEvent<HTMLDivElement>,
     ) => {
         dispatch(onKeyDownTyping(key))
     }
@@ -92,8 +88,10 @@ export const TypingInput: React.FC = () => {
             fullWidth
             variant="outlined"
             InputProps={{
-                classes: {
-                    input: classes.textInput,
+                sx: {
+                    textAlign: 'center',
+                    fontWeight: 'bold',
+                    fontSize: 20,
                 },
             }}
             value={currentWordInput}
@@ -101,7 +99,7 @@ export const TypingInput: React.FC = () => {
             className={clsx(
                 classes.textInputContainer,
                 greenEnabled && classes.greenColor,
-                redEnabled && classes.redColor
+                redEnabled && classes.redColor,
             )}
         />
     )

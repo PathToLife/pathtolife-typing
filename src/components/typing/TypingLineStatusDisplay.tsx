@@ -1,6 +1,6 @@
-import { createStyles, makeStyles, Typography } from '@material-ui/core'
+import { createStyles, makeStyles, Typography } from '@mui/material'
 import React from 'react'
-import { green, red } from '@material-ui/core/colors'
+import { green, red } from '@mui/material/colors'
 import clsx from 'clsx'
 import { IRootState } from '../../store/mainStore'
 import { IWordState, TLineState } from '../../store/typing/wordHelpers'
@@ -22,7 +22,7 @@ const styles = makeStyles((theme) =>
             color: red[500],
             textDecoration: 'underline',
         },
-    })
+    }),
 )
 
 interface TypingWordsDisplayProps {
@@ -48,7 +48,7 @@ export const TypingWordDisplay: React.FC<TypingWordsDisplayProps> = (props) => {
                             letter.status === 'incorrect-missing-letter' &&
                                 classes.incorrectMissingLetter,
                             letter.status === 'incorrect-extra-letter' &&
-                                classes.incorrectExtraLetter
+                                classes.incorrectExtraLetter,
                         )}
                     >
                         {letter.letter}
@@ -80,7 +80,7 @@ const styles2 = makeStyles((theme) =>
             flexBasis: '100%',
             height: 0,
         },
-    })
+    }),
 )
 
 interface TypingLineStatusDisplayProps {
@@ -89,9 +89,9 @@ interface TypingLineStatusDisplayProps {
     nextLineState: TLineState
 }
 
-const UnconnectedTypingLineStatusDisplay: React.FC<TypingLineStatusDisplayProps> = (
-    props
-) => {
+const UnconnectedTypingLineStatusDisplay: React.FC<
+    TypingLineStatusDisplayProps
+> = (props) => {
     const { previousLineState, currentLineState, nextLineState } = props
     const classes = styles2()
 

@@ -5,16 +5,16 @@ import {
     Grid,
     makeStyles,
     Paper,
-    Typography
-} from '@material-ui/core'
+    Typography,
+} from '@mui/material'
 import { useSelectorAppState } from '../../store/mainStore'
 
 const styles = makeStyles(() =>
     createStyles({
         fullWidth: {
-            width: '100%'
-        }
-    })
+            width: '100%',
+        },
+    }),
 )
 
 interface TypingCardProps {
@@ -54,12 +54,19 @@ export const TypingWPMCard = () => {
 
 export const TypingTotalWordsCard = () => {
     const totalWordsTyped = useSelectorAppState(
-        (s) => s.typing.wordsPerMsInterval
+        (s) => s.typing.wordsPerMsInterval,
     ).filter((word) => word.isWordCorrect).length
     return <TypingCard title={'Total Words'} value={totalWordsTyped} />
 }
 
 export const TypingLastKeyIntervalCard = () => {
-    const lastKeyInterval = useSelectorAppState(s => s.typing.keyPerMsInterval.slice(-1))
-    return <TypingCard title={'Last Key MS'} value={`${lastKeyInterval || 0} ms`}/>
+    const lastKeyInterval = useSelectorAppState((s) =>
+        s.typing.keyPerMsInterval.slice(-1),
+    )
+    return (
+        <TypingCard
+            title={'Last Key MS'}
+            value={`${lastKeyInterval || 0} ms`}
+        />
+    )
 }
