@@ -85,18 +85,16 @@ export const typingReducer = createReducer(initialState, (builder) => {
             state.wordsPerMsInterval = action.payload
 
             // @todo standardise wpm calculation to be keys-per-min / 5
-            const [
-                totalCorrectWords,
-                totalTimeMs,
-            ] = state.wordsPerMsInterval.reduce<[number, number]>(
-                ([tCW, ttMs], val) => {
-                    if (val.isWordCorrect) {
-                        return [tCW + 1, ttMs + val.msSinceLast]
-                    }
-                    return [tCW, ttMs + val.msSinceLast]
-                },
-                [0, 0]
-            )
+            const [totalCorrectWords, totalTimeMs] =
+                state.wordsPerMsInterval.reduce<[number, number]>(
+                    ([tCW, ttMs], val) => {
+                        if (val.isWordCorrect) {
+                            return [tCW + 1, ttMs + val.msSinceLast]
+                        }
+                        return [tCW, ttMs + val.msSinceLast]
+                    },
+                    [0, 0],
+                )
             const wpm = (totalCorrectWords * 60) / (totalTimeMs / 1000)
             state.wordsPerMinuteAvgAdjusted = Math.floor(wpm)
         })

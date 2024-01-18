@@ -1,4 +1,4 @@
-import { createStyles, Grid, makeStyles } from '@mui/material'
+import { Grid } from '@mui/material'
 import React, { useEffect } from 'react'
 
 import { TypingLineStatusDisplay } from './TypingLineStatusDisplay'
@@ -13,17 +13,7 @@ import {
 } from './TypingCards'
 // import { TypingTypedLinesDisplay } from './TypingTypedLinesDisplay'
 
-const styles = makeStyles((theme) =>
-    createStyles({
-        rootContainer: {
-            width: '100%',
-        },
-    }),
-)
-
 export const TypingMain: React.FC = () => {
-    const classes = styles()
-
     const dispatch = useThunkDispatch()
 
     useEffect(() => {
@@ -31,17 +21,17 @@ export const TypingMain: React.FC = () => {
     }, [dispatch])
 
     return (
-        <Grid container className={classes.rootContainer} spacing={2}>
-            <Grid item container justify="center" xs={12}>
+        <Grid container sx={{ width: '100%' }} spacing={2}>
+            <Grid item container justifyContent="center" xs={12}>
                 {/* <TypingTypedLinesDisplay /> */}
             </Grid>
-            <Grid item container justify="center" xs={12}>
+            <Grid item container justifyContent="center" xs={12}>
                 <TypingLineStatusDisplay />
             </Grid>
-            <Grid item container justify="center" xs={12}>
+            <Grid item container justifyContent="center" xs={12}>
                 <TypingInput />
             </Grid>
-            <Grid item container justify="center" xs={12}>
+            <Grid item container justifyContent="center" xs={12}>
                 <TypingKpmDisplay />
             </Grid>
             <Grid item container xs={6}>

@@ -1,21 +1,5 @@
-import React from 'react'
-import {
-    Box,
-    createStyles,
-    Grid,
-    makeStyles,
-    Paper,
-    Typography,
-} from '@mui/material'
+import { Box, Grid, Paper, Typography } from '@mui/material'
 import { useSelectorAppState } from '../../store/mainStore'
-
-const styles = makeStyles(() =>
-    createStyles({
-        fullWidth: {
-            width: '100%',
-        },
-    }),
-)
 
 interface TypingCardProps {
     title: string
@@ -23,11 +7,9 @@ interface TypingCardProps {
 }
 
 export const TypingCard = (props: TypingCardProps) => {
-    const classes = styles()
-
     return (
         <Paper>
-            <Box p={3} className={classes.fullWidth}>
+            <Box p={3} sx={{ width: '100%' }}>
                 <Grid
                     container
                     alignItems={'center'}

@@ -1,29 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import clsx from 'clsx'
-import { createStyles, makeStyles, TextField } from '@mui/material'
+import { TextField, Theme } from '@mui/material'
 import { useSelectorAppState, useThunkDispatch } from '../../store/mainStore'
 import { onKeyDownTyping } from '../../store/typing/typingActions'
 
-const styles = makeStyles((theme) =>
-    createStyles({
-        textInput: ,
-        textInputContainer: {
-            transition: 'background-color 0.2s linear',
-        },
-        greenColor: {
-            backgroundColor: theme.palette.success.light,
-            color: theme.palette.success.dark,
-        },
-        redColor: {
-            backgroundColor: theme.palette.error.light,
-            color: theme.palette.error.dark,
-        },
-    }),
-)
-
 export const TypingInput: React.FC = () => {
-    const classes = styles()
-
     const currentWordIdx = useSelectorAppState((s) => s.typing.currentWordIdx)
 
     const wordStates = useSelectorAppState((s) => s.typing.lineStateCurrent)
@@ -81,6 +61,26 @@ export const TypingInput: React.FC = () => {
         dispatch(onKeyDownTyping(key))
     }
 
+    const bgColor = (theme: Theme) => {
+        if (greenEnabled) {
+            return theme.palette.success.light
+        }
+        if (redEnabled) {
+            return theme.palette.error.light
+        }
+        return theme.palette.background.default
+    }
+
+    const color = (theme: Theme) => {
+        if (greenEnabled) {
+            return theme.palette.success.dark
+        }
+        if (redEnabled) {
+            return theme.palette.error.dark
+        }
+        return theme.palette.text.primary
+    }
+
     return (
         <TextField
             autoFocus
@@ -96,11 +96,11 @@ export const TypingInput: React.FC = () => {
             }}
             value={currentWordInput}
             onKeyDown={(e) => handleTextInputKeyPress(e)}
-            className={clsx(
-                classes.textInputContainer,
-                greenEnabled && classes.greenColor,
-                redEnabled && classes.redColor,
-            )}
+            sx={(theme) => ({
+                backgroundColor: bgColor(theme),
+                color: color(theme),
+                transition: 'background-color 0.2s linear',
+            })}
         />
     )
 }

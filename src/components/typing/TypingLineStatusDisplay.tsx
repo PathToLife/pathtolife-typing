@@ -1,29 +1,38 @@
-import { createStyles, makeStyles, Typography } from '@mui/material'
 import React from 'react'
+import { Box, Typography } from '@mui/material'
 import { green, red } from '@mui/material/colors'
-import clsx from 'clsx'
-import { IRootState } from '../../store/mainStore'
-import { IWordState, TLineState } from '../../store/typing/wordHelpers'
+import {
+    IWordState,
+    TLetterStatus,
+    TLineState,
+} from '../../store/typing/wordHelpers'
 import { connect } from 'react-redux'
+import { RootState } from '../../store/mainStore'
 
-const styles = makeStyles((theme) =>
-    createStyles({
-        correctLetter: {
-            color: green[500],
-        },
-        incorrectLetter: {
-            color: red[500],
-        },
-        incorrectExtraLetter: {
-            color: red[500],
-            textDecoration: 'line-through',
-        },
-        incorrectMissingLetter: {
-            color: red[500],
-            textDecoration: 'underline',
-        },
-    }),
-)
+function calulateStyle(status: TLetterStatus) {
+    switch (status) {
+        case 'correct':
+            return {
+                color: green[500],
+            }
+        case 'incorrect-wrong-letter':
+            return {
+                color: red[500],
+            }
+        case 'incorrect-extra-letter':
+            return {
+                color: red[500],
+                textDecoration: 'line-through',
+            }
+        case 'incorrect-missing-letter':
+            return {
+                color: red[500],
+                textDecoration: 'underline',
+            }
+        default:
+            return {}
+    }
+}
 
 interface TypingWordsDisplayProps {
     word: IWordState
@@ -32,25 +41,11 @@ interface TypingWordsDisplayProps {
 export const TypingWordDisplay: React.FC<TypingWordsDisplayProps> = (props) => {
     const { word } = props
 
-    const classes = styles()
-
     return (
         <>
             {word.letterStates.map((letter, index) => {
                 return (
-                    <span
-                        key={index}
-                        className={clsx(
-                            letter.status === 'correct' &&
-                                classes.correctLetter,
-                            letter.status === 'incorrect-wrong-letter' &&
-                                classes.incorrectLetter,
-                            letter.status === 'incorrect-missing-letter' &&
-                                classes.incorrectMissingLetter,
-                            letter.status === 'incorrect-extra-letter' &&
-                                classes.incorrectExtraLetter,
-                        )}
-                    >
+                    <span key={index} style={calulateStyle(letter.status)}>
                         {letter.letter}
                     </span>
                 )
@@ -59,28 +54,14 @@ export const TypingWordDisplay: React.FC<TypingWordsDisplayProps> = (props) => {
     )
 }
 
-const styles2 = makeStyles((theme) =>
-    createStyles({
-        container: {
-            display: 'flex',
-            justifyContent: 'center',
-            flexWrap: 'wrap',
-
-            width: '100%',
-            minHeight: theme.spacing(6),
-
-            borderColor: theme.palette.common.black,
-            borderRadius: theme.shape.borderRadius,
-            borderStyle: 'solid',
-
-            padding: theme.spacing(1),
-        },
-        flexBreak: {
+const FlexBreak = () => (
+    <div
+        style={{
             width: '100%',
             flexBasis: '100%',
             height: 0,
-        },
-    }),
+        }}
+    />
 )
 
 interface TypingLineStatusDisplayProps {
@@ -93,7 +74,6 @@ const UnconnectedTypingLineStatusDisplay: React.FC<
     TypingLineStatusDisplayProps
 > = (props) => {
     const { previousLineState, currentLineState, nextLineState } = props
-    const classes = styles2()
 
     const renderLine = (lineState: TLineState) => {
         if (lineState.length === 0) {
@@ -111,21 +91,36 @@ const UnconnectedTypingLineStatusDisplay: React.FC<
     }
 
     return (
-        <div className={classes.container}>
+        <Box
+            sx={(theme) => ({
+                display: 'flex',
+                justifyContent: 'center',
+                flexWrap: 'wrap',
+
+                width: '100%',
+                minHeight: theme.spacing(6),
+
+                borderColor: theme.palette.common.black,
+                borderRadius: theme.shape.borderRadius,
+                borderStyle: 'solid',
+
+                padding: theme.spacing(1),
+            })}
+        >
             <Typography variant="h6" color={'textSecondary'}>
                 {renderLine(previousLineState)}
             </Typography>
 
-            <div className={classes.flexBreak} />
+            <FlexBreak />
 
             <Typography variant="h5">{renderLine(currentLineState)}</Typography>
 
-            <div className={classes.flexBreak} />
+            <FlexBreak />
 
             <Typography variant="h6" color={'textSecondary'}>
                 {renderLine(nextLineState)}
             </Typography>
-        </div>
+        </Box>
     )
 }
 
@@ -133,7 +128,7 @@ export const TypingLineStatusDisplay = connect<
     TypingLineStatusDisplayProps,
     {},
     {},
-    IRootState
+    RootState
 >((s) => {
     return {
         previousLineState: s.typing.lineStatePrevious,

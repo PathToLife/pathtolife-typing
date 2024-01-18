@@ -1,26 +1,11 @@
 import { useEffect, useRef } from 'react'
-import { createStyles, makeStyles, Typography } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import { useSelectorAppState } from '../../store/mainStore'
-
-const styles = makeStyles((theme) =>
-    createStyles({
-        textDisplay: {
-            height: '30vh',
-            width: '100%',
-            borderColor: theme.palette.common.black,
-            borderRadius: theme.shape.borderRadius,
-            borderStyle: 'solid',
-            padding: theme.spacing(1),
-            overflowY: 'scroll',
-        },
-    }),
-)
 
 // This component is not complete
 // Purpose -  allow the user to see more of the text that has been typed
 
 export const TypingTypedLinesDisplay = () => {
-    const classes = styles()
     const textEndRef = useRef<HTMLDivElement>(null)
 
     const textDisplay = useSelectorAppState((s) => s.typing.typedLines)
@@ -41,12 +26,22 @@ export const TypingTypedLinesDisplay = () => {
     }, [textDisplay])
 
     return (
-        <div className={classes.textDisplay}>
+        <Box
+            sx={(theme) => ({
+                height: '30vh',
+                width: '100%',
+                borderColor: theme.palette.common.black,
+                borderRadius: theme.shape.borderRadius,
+                borderStyle: 'solid',
+                padding: theme.spacing(1),
+                overflowY: 'scroll',
+            })}
+        >
             {textDisplay.map((text, index) => {
                 return <Typography key={index}>{text}</Typography>
             })}
             pre
             <div ref={textEndRef} />
-        </div>
+        </Box>
     )
 }
