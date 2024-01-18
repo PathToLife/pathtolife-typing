@@ -1,18 +1,13 @@
-import { Action, applyMiddleware, combineReducers, createStore } from 'redux'
 import { ITypingState, typingReducer } from './typing/typingReducer'
-import { createSelectorHook, useDispatch } from 'react-redux'
-import thunk, { ThunkDispatch } from 'redux-thunk'
+import { configureStore } from '@reduxjs/toolkit'
 
 export interface IRootState {
     typing: ITypingState
 }
 
-const reducers = combineReducers<IRootState>({
-    typing: typingReducer,
+// thunk middleware is automatically added
+export const mainStore = configureStore({
+    reducer: {
+        typing: typingReducer,
+    },
 })
-
-export const mainStore = createStore(reducers, applyMiddleware(thunk))
-
-export const useThunkDispatch = () =>
-    useDispatch<ThunkDispatch<IRootState, undefined, Action<string>>>()
-export const useSelectorAppState = createSelectorHook<IRootState>()

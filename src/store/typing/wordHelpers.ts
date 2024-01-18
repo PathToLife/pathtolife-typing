@@ -29,8 +29,8 @@ export interface IWordInterval {
 export type TLineState = WordState[]
 
 export class WordState implements IWordState {
-    public correctWord
-    public letterStates
+    public correctWord: string
+    public letterStates: ILetterState[]
 
     constructor(wordState: Partial<IWordState>) {
         this.correctWord = wordState.correctWord || ''
@@ -64,7 +64,7 @@ export class WordState implements IWordState {
 
     public generateLetterState(
         typedWord: string,
-        missingLetterStatus: TLetterStatus = 'pending'
+        missingLetterStatus: TLetterStatus = 'pending',
     ) {
         if (typedWord.length === 0) {
             this.setAllPending()
@@ -87,7 +87,7 @@ export class WordState implements IWordState {
                             : 'incorrect-wrong-letter',
                     letter: l,
                 }
-            }
+            },
         )
 
         const hasMissingLetters = typedWord.length < this.correctWord.length
@@ -147,7 +147,7 @@ export class WordState implements IWordState {
 
 export const generateRandomSentence = (
     numWords: number,
-    wordList: string[] = top200Words
+    wordList: string[] = top200Words,
 ): string[] => {
     const outList = [] as string[]
 
@@ -161,13 +161,13 @@ export const generateRandomSentence = (
 
 export const generateRandomLineState = (
     numWords: number,
-    wordList: string[] = top200Words
+    wordList: string[] = top200Words,
 ): TLineState => {
     const words = generateRandomSentence(numWords, wordList)
     return words.map(
         (correctWord) =>
             new WordState({
                 correctWord,
-            })
+            }),
     )
 }
