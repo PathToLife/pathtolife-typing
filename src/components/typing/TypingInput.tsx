@@ -87,7 +87,7 @@ export const TypingInput: React.FC = () => {
             placeholder="type here"
             fullWidth
             variant="outlined"
-            InputProps={{
+            inputProps={{
                 sx: {
                     textAlign: 'center',
                     fontWeight: 'bold',
