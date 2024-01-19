@@ -36,9 +36,8 @@ export const onKeyDownTyping =
         const currentWord = store().typing.currentWordInput
         const currentWordIdx = store().typing.currentWordIdx
 
-        if (e.ctrlKey && e.key === 'r') {
-            dispatch(resetTyping())
-            e.preventDefault()
+        // allow page refresh, returning right away allows internal browser shortcut to detect this key combo
+        if ((e.ctrlKey && e.key === 'r') || (e.metaKey && e.key === 'r')) {
             return
         }
 
@@ -71,11 +70,13 @@ export const onKeyDownTyping =
         } else if (key === 'Backspace') {
             e.preventDefault()
 
+            // still data in current word, remove last character
             if (currentWord.length > 0) {
                 const newWord = currentWord.slice(0, -1)
                 dispatch(updateWordState(newWord, currentWordIdx))
                 dispatch(setInputWord(newWord))
                 dispatch(storeKeydownRate())
+                // go to previous word
             } else {
                 dispatch(previousWord())
             }
