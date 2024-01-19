@@ -82,10 +82,10 @@ const UnconnectedTypingLineStatusDisplay: React.FC<
 
         return lineState.map((word, i) => {
             return (
-                <>
+                <span key={`${i}-${word}`}>
                     <TypingWordDisplay word={word} key={i} />
-                    <span key={`space-${i}`}>&nbsp;</span>
-                </>
+                    <span>&nbsp;</span>
+                </span>
             )
         })
     }
