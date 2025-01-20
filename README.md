@@ -19,3 +19,8 @@ Install using pnpm
 Then run in development mode
 
 `pnpm run dev`
+
+
+## Credits
+
+- English top 1/3 million word frequencies https://www.kaggle.com/datasets/rtatman/english-word-frequency
