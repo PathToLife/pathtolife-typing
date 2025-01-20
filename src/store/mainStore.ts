@@ -1,5 +1,5 @@
 import { TypedUseSelectorHook, useSelector } from 'react-redux'
-import { ITypingState, typingReducer } from './typing/typingReducer'
+import { typingReducer } from './typing/typingReducer'
 import { configureStore } from '@reduxjs/toolkit'
 
 // thunk middleware is automatically added

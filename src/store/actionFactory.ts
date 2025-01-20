@@ -1,6 +1,5 @@
-import { ThunkAction } from 'redux-thunk'
-import { Action } from 'redux'
 import { RootState } from './mainStore'
+import { Action, ThunkAction } from '@reduxjs/toolkit'
 
 export type RootThunkAction<
     TReturn = void,
