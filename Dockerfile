@@ -1,11 +1,16 @@
-FROM node:20
+FROM node:22-slim as BUILDER
+
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN corepack enable
 
 WORKDIR /usr/src/app
 
-COPY package*.json ./
-RUN npm ci
+COPY package*.json .
+COPY pnpm-lock.yaml .
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 COPY . .
-RUN npm run build
+RUN pnpm run build
 
 # production environment
 FROM nginx:stable-alpine
